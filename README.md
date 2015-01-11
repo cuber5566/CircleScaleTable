@@ -6,7 +6,8 @@
 
 # Simple
 ``` java
-circleScaleTable.setParameter(float r1, float totalDegree, int totalValue, int longCalibration, float rotationAngle)
+circleScaleTable.setParameter(float r1, float totalDegree, int totalValue, 
+            int longCalibration, float rotationAngle)
 ```
 
 ``` java
