@@ -32,18 +32,18 @@ public class CircleScaleTable extends View implements OnTouchListener {
 
     private ArrayList<Point> points;
     private Paint p_dark, p_light, p_line;
-    private OnRegulatorChangeListener mListener;
+    private OnValueChangeListener mListener;
 
-    public interface OnRegulatorChangeListener {
+    public interface OnValueChangeListener {
 
-        public void onRegulatorChange(int value);
+        public void onValueChange(int value);
     }
 
     public CircleScaleTable(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public void setOnRegulatorChangeListener(OnRegulatorChangeListener listener) {
+    public void setOnValueChangeListener(OnValueChangeListener listener) {
         this.mListener = listener;
     }
 
@@ -374,7 +374,7 @@ public class CircleScaleTable extends View implements OnTouchListener {
         // callback
         int value = (int) (totalValue * cur_degree / totalDegree);
         if (last_value != value) {
-            mListener.onRegulatorChange(value);
+            mListener.onValueChange(value);
             last_value = value;
         }
 
