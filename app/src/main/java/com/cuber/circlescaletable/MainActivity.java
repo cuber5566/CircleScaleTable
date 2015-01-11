@@ -107,9 +107,9 @@ public class MainActivity extends Activity {
     private void init() {
         tv = (TextView) findViewById(R.id.value);
         circleScaleTable.setParameter(300, 360, 60, 5, 0);
-        circleScaleTable.setOnRegulatorChangeListener(new CircleScaleTable.OnRegulatorChangeListener() {
+        circleScaleTable.setOnValueChangeListener(new CircleScaleTable.OnValueChangeListener() {
             @Override
-            public void onRegulatorChange(int value) {
+            public void onValueChange(int value) {
                 tv.setText("" + value);
             }
         });
