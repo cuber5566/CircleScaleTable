@@ -8,7 +8,7 @@
     <view
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        class="com.cuber.circlescaletable.CircleScaleTable"
+        class="com.cuber.library.CircleScaleTable"
         android:id="@+id/regulator"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true" />

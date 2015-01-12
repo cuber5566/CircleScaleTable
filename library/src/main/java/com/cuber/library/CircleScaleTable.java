@@ -1,4 +1,4 @@
-package com.cuber.circlescaletable;
+package com.cuber.library;
 
 import android.annotation.SuppressLint;
 import android.content.Context;

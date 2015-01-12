@@ -8,6 +8,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.cuber.library.CircleScaleTable;
+
 public class MainActivity extends Activity {
 
     private CircleScaleTable circleScaleTable;
