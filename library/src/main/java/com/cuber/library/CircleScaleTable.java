@@ -16,16 +16,16 @@ import java.util.ArrayList;
 
 public class CircleScaleTable extends View implements OnTouchListener {
 
-    private double r1, r2;
-    private float totalValue;
-    private float totalDegree;
+    private float r1, r2;
+    private float totalValue = 60;
+    private float totalDegree = 360;
     private float UnitDegree;
     private float rotationAngle = 0;
-    private float scale_range_degree = 30;
+    private float scale_range_degree=15;
     private float point_length = 50;
     private float centerX, centerY;
     private float cur_degree = 0;
-    private int longCalibration;
+    private int longCalibration = 5;
     private float cur_quadrant = 1;
     private float last_quadrant = 1;
     private int count = 1, last_value;
@@ -73,10 +73,6 @@ public class CircleScaleTable extends View implements OnTouchListener {
 
     public void setPoint_length(float point_length) {
         this.point_length = point_length;
-    }
-
-    public void setScale_range_degree(float scale_range_degree) {
-        this.scale_range_degree = scale_range_degree;
     }
 
     public void setPaint_dark(int a, int r, int g, int b, int strokeWidth) {
@@ -191,72 +187,74 @@ public class CircleScaleTable extends View implements OnTouchListener {
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
 
+                //quadrant 1
                 if (0 <= temp_degree && temp_degree < totalDegree / 4 * 1) {
                     cur_degree = temp_degree;
-                    cur_quadrant = 1;
-                    last_quadrant = 1;
-                    count = 1;
+                    cur_quadrant = last_quadrant = count = 1;
                 }
-                if (totalDegree / 4 * 1 <= temp_degree && temp_degree < totalDegree / 4 * 2) {
+
+                //quadrant 2
+                else if (totalDegree / 4 * 1 <= temp_degree && temp_degree < totalDegree / 4 * 2) {
                     cur_degree = temp_degree;
-                    cur_quadrant = 2;
-                    last_quadrant = 2;
-                    count = 2;
+                    cur_quadrant = last_quadrant = count = 2;
                 }
-                if (totalDegree / 4 * 2 <= temp_degree && temp_degree < totalDegree / 4 * 3) {
+
+                //quadrant 3
+                else if (totalDegree / 4 * 2 <= temp_degree && temp_degree < totalDegree / 4 * 3) {
                     cur_degree = temp_degree;
-                    cur_quadrant = 3;
-                    last_quadrant = 3;
-                    count = 3;
+                    cur_quadrant = last_quadrant = count = 3;
                 }
-                if (totalDegree / 4 * 3 <= temp_degree && temp_degree < totalDegree) {
+
+                //quadrant 4
+                else if (totalDegree / 4 * 3 <= temp_degree && temp_degree < totalDegree) {
                     cur_degree = temp_degree;
-                    cur_quadrant = 4;
-                    last_quadrant = 4;
-                    count = 4;
+                    cur_quadrant = last_quadrant = count = 4;
+                }
+
+                //out side
+                else {
+                    break;
                 }
                 calPoint();
                 invalidate();
                 break;
             case MotionEvent.ACTION_MOVE:
 
+                if (temp_degree > totalDegree)
+                    temp_degree = totalDegree - 1;
+
+                //quadrant 1
                 if (0 <= temp_degree && temp_degree < totalDegree / 4 * 1) {
                     cur_quadrant = 1;
 
                     if (last_quadrant == 4 && count != 0) {
                         count = 5;
                         cur_degree = totalDegree - 1;
-                    } else if (count == 5 || count == 0) {
-
-                    } else {
-                        count += cur_quadrant - last_quadrant;
                     }
-                } else if (totalDegree / 4 * 1 <= temp_degree && temp_degree < totalDegree / 4 * 2) {
+                }
+
+                //quadrant 2
+                else if (totalDegree / 4 * 1 <= temp_degree && temp_degree < totalDegree / 4 * 2) {
                     cur_quadrant = 2;
-                    if (count == 5 || count == 0) {
+                }
 
-                    } else {
-                        count += cur_quadrant - last_quadrant;
-                    }
-                } else if (totalDegree / 4 * 2 <= temp_degree && temp_degree < totalDegree / 4 * 3) {
+                //quadrant 3
+                else if (totalDegree / 4 * 2 <= temp_degree && temp_degree < totalDegree / 4 * 3) {
                     cur_quadrant = 3;
-                    if (count == 5 || count == 0) {
+                }
 
-                    } else {
-                        count += cur_quadrant - last_quadrant;
-                    }
-                } else if (totalDegree / 4 * 3 <= temp_degree && temp_degree < totalDegree) {
+                //quadrant 4
+                else if (totalDegree / 4 * 3 <= temp_degree && temp_degree < totalDegree) {
                     cur_quadrant = 4;
 
                     if (last_quadrant == 1 && count != 5) {
                         count = 0;
                         cur_degree = 0;
-                    } else if (count == 5 || count == 0) {
-
-                    } else {
-                        count += cur_quadrant - last_quadrant;
                     }
-                } else {
+                }
+
+                //quadrant 0 or 5
+                else {
                     if (last_quadrant == 1 && count != 5) {
                         cur_quadrant = 4;
                         count = 0;
@@ -268,6 +266,11 @@ public class CircleScaleTable extends View implements OnTouchListener {
                         cur_degree = totalDegree - 1;
                     }
                 }
+
+                if (count != 5 && count != 0) {
+                    count += cur_quadrant - last_quadrant;
+                }
+
 
                 if (count == 0) {
                     if (last_quadrant == 4 && cur_quadrant == 1) {
@@ -294,7 +297,6 @@ public class CircleScaleTable extends View implements OnTouchListener {
                 Log.i("DEBUG", "count:" + count + ", cur_degree:" + cur_degree);
                 calPoint();
                 invalidate();
-
                 break;
             case MotionEvent.ACTION_UP:
                 break;
@@ -306,33 +308,33 @@ public class CircleScaleTable extends View implements OnTouchListener {
 
     private void calPoint() {
 
-        float temp_degree;
+        float point_degree;
+
         for (int i = 0; i < points.size(); i++) {
 
-            temp_degree = points.get(i).getDegree() - rotationAngle;
+            point_degree = points.get(i).getDegree() - rotationAngle;
 
-            if (temp_degree < 0) {
-                temp_degree += 360;
+            if (point_degree < 0) {
+                point_degree += 360;
             }
-            if (cur_degree - scale_range_degree <= temp_degree && temp_degree < cur_degree + scale_range_degree) {
+            if (cur_degree - scale_range_degree <= point_degree && point_degree < cur_degree + scale_range_degree) {
                 float temp_x1 = points.get(i).getx1();
                 float temp_y1 = points.get(i).gety1();
                 float temp_x2 = points.get(i).getx2();
                 float temp_y2 = points.get(i).gety2();
-                // float temp_d = points.get(i).getDegree();
 
                 float scale1;
                 float scale2;
 
-                if (temp_degree <= cur_degree) {
-                    scale1 = 1 + Math.abs(Math.abs(cur_degree - temp_degree) - scale_range_degree) * 0.003f;
-                    scale2 = 1 + Math.abs(Math.abs(cur_degree - temp_degree) - scale_range_degree) * 0.01f;
+                if (point_degree <= cur_degree) {
+                    scale1 = 1 + Math.abs(Math.abs(cur_degree - point_degree) - scale_range_degree) * 0.003f;
+                    scale2 = 1 + Math.abs(Math.abs(cur_degree - point_degree) - scale_range_degree) * 0.01f;
 
                     points.get(i).setx1y1(temp_x1 * scale1, temp_y1 * scale1);
                     points.get(i).setx2y2(temp_x2 * scale2, temp_y2 * scale2);
                 } else {
-                    scale1 = 1 + Math.abs(Math.abs(cur_degree - temp_degree) - scale_range_degree) * 0.003f;
-                    scale2 = 1 + Math.abs(Math.abs(cur_degree - temp_degree) - scale_range_degree) * 0.006f;
+                    scale1 = 1 + Math.abs(Math.abs(cur_degree - point_degree) - scale_range_degree) * 0.003f;
+                    scale2 = 1 + Math.abs(Math.abs(cur_degree - point_degree) - scale_range_degree) * 0.006f;
 
                     points.get(i).setx1y1(temp_x1 * scale1, temp_y1 * scale1);
                     points.get(i).setx2y2(temp_x2 * scale2, temp_y2 * scale2);
@@ -366,7 +368,7 @@ public class CircleScaleTable extends View implements OnTouchListener {
 
         }
 
-        RectF rectF = new RectF((int) (centerX - r1 + 15), (int) (centerY - r1 + 15), (int) (centerX + r1 - 15), (int) (centerY + r1 - 15));
+        RectF rectF = new RectF((centerX - r1 + 15), (centerY - r1 + 15), (centerX + r1 - 15), (centerY + r1 - 15));
 
         canvas.drawArc(rectF, rotationAngle, cur_degree, false, p_line);
         getPoints();
