@@ -16,19 +16,20 @@ import java.util.ArrayList;
 
 public class CircleScaleTable extends View implements OnTouchListener {
 
-    private float r1, r2;
-    private float totalValue = 60;
+    private float point_length = 50;
+    private float r1 = 300, r2 = r1 + point_length;
+    private int totalValue = 60;
     private float totalDegree = 360;
     private float UnitDegree;
     private float rotationAngle = 0;
-    private float scale_range_degree=15;
-    private float point_length = 50;
+    private float scale_range_degree = 15;
     private float centerX, centerY;
     private float cur_degree = 0;
     private int longCalibration = 5;
     private float cur_quadrant = 1;
     private float last_quadrant = 1;
-    private int count = 1, last_value;
+    private int count = 1;
+    private int last_value;
 
     private ArrayList<Point> points;
     private Paint p_dark, p_light, p_line;
@@ -39,8 +40,19 @@ public class CircleScaleTable extends View implements OnTouchListener {
         public void onValueChange(int value);
     }
 
+    public CircleScaleTable(Context context) {
+        super(context);
+        setParameter(r1, totalDegree, totalValue, longCalibration, rotationAngle);
+    }
+
     public CircleScaleTable(Context context, AttributeSet attrs) {
         super(context, attrs);
+        setParameter(r1, totalDegree, totalValue, longCalibration, rotationAngle);
+    }
+
+    public CircleScaleTable(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+        setParameter(r1, totalDegree, totalValue, longCalibration, rotationAngle);
     }
 
     public void setOnValueChangeListener(OnValueChangeListener listener) {
